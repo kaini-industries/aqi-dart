@@ -265,8 +265,11 @@ function CigaretteLegendItems() {
           <dd>Monitor category at a point; worst category in a cluster.</dd>
         </div>
         <div>
-          <dt>MAX / —</dt>
-          <dd>Highest site, never a total; dash means unavailable.</dd>
+          <dt>Cluster</dt>
+          <dd>
+            Top: monitor count. Bottom: highest cigarette-equivalent/day;
+            never a total.
+          </dd>
         </div>
       </dl>
     </div>
@@ -755,14 +758,13 @@ function addReadingLayers(
       "text-field": [
         "concat",
         ["to-string", ["get", "point_count_abbreviated"]],
-        "\nSITES · MAX\n",
+        "\n",
         CIGARETTE_CLUSTER_VALUE_EXPRESSION,
-        " CIG/DAY",
       ],
       "text-font": ["Noto Sans Regular"],
-      "text-size": 8.6,
-      "text-line-height": 0.96,
-      "text-letter-spacing": 0.015,
+      "text-size": 11,
+      "text-line-height": 1,
+      "text-letter-spacing": 0,
       "text-allow-overlap": true,
       "text-ignore-placement": true,
       visibility: layerVisibility(displayMode, "cigarettes"),
