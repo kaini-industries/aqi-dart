@@ -94,6 +94,12 @@
   text-transform: uppercase;
 }
 
+.pollutantNotation {
+  font-variant-numeric: lining-nums proportional-nums;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
 .title {
   margin-left: -0.025em;
   font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;

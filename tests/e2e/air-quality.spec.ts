@@ -79,6 +79,9 @@ test("loads the current monitor map and clearly labels fallback data", async ({
   page,
 }) => {
   await expect(page.getByRole("heading", { name: "Air Equivalent" })).toBeVisible();
+  await expect(
+    page.getByText("PM2.5 field map · North America", { exact: true }),
+  ).toBeVisible();
   await expect(page.getByText("Demonstration", { exact: true })).toBeVisible();
   await expect(page.getByText("Bundled sample readings", { exact: true })).toBeVisible();
   await expect(page.getByText("Monitors").getByText("3")).toBeVisible();
@@ -95,6 +98,13 @@ test("loads the current monitor map and clearly labels fallback data", async ({
   await expect(
     mapRegion.getByText("Plotting current monitors", { exact: true }),
   ).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Cigarette equivalent" }).click();
+  await expect(
+    page.getByText(
+      /latest outdoor PM2\.5 level persisted for 24 hours/,
+    ),
+  ).toBeVisible();
 });
 
 test("keeps AQI, raw concentration, projected rate, and measured history distinct", async ({

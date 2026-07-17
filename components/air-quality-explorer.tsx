@@ -585,7 +585,10 @@ export function AirQualityExplorer() {
             <span>AE</span>
           </div>
           <div>
-            <p className={styles.kicker}>PM₂.₅ field map · North America</p>
+            <p className={styles.kicker}>
+              <span className={styles.pollutantNotation}>PM2.5</span>{" "}
+              field map · North America
+            </p>
             <h1 className={styles.title}>Air Equivalent</h1>
           </div>
         </div>
@@ -722,7 +725,7 @@ export function AirQualityExplorer() {
 
         {displayMode === "cigarettes" ? (
           <p className={styles.analogyNote} role="note">
-            Rough projected rate if the latest outdoor PM₂.₅ level persisted
+            Rough projected rate if the latest outdoor PM2.5 level persisted
             for 24 hours — not personal exposure or actual smoking.
           </p>
         ) : null}
