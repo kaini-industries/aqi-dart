@@ -13,6 +13,42 @@
   font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
 }
 
+.root::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: oklch(97% 0.018 95 / 24%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.root[data-display-mode="cigarettes"]::after {
+  animation: mode-wash-cigarettes 160ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.root[data-display-mode="aqi"]::after {
+  animation: mode-wash-aqi 160ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes mode-wash-cigarettes {
+  from {
+    opacity: 0.48;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mode-wash-aqi {
+  from {
+    opacity: 0.48;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .map {
   position: absolute;
   inset: 0;
@@ -144,6 +180,11 @@
   border-block-start: 1px solid oklch(81% 0.018 126);
 }
 
+.mobileLegend .equivalentKey {
+  padding: 0.7rem;
+  border-block-start: 1px solid oklch(81% 0.018 126);
+}
+
 .legendHeading {
   display: block;
   margin-block-end: 0.5rem;
@@ -188,6 +229,137 @@
   color: oklch(40% 0.026 140);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.equivalentKey {
+  display: grid;
+  gap: 0.62rem;
+}
+
+.equivalentSample {
+  display: flex;
+  min-block-size: 2.9rem;
+  align-items: flex-end;
+  padding: 0.15rem 0.2rem 0.2rem;
+}
+
+.equivalentSampleAnchor {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 0.85rem;
+  inline-size: 0.85rem;
+  block-size: 0.85rem;
+  margin: 0 -0.2rem 0.08rem 0;
+  border: 1.5px solid oklch(24% 0.035 142);
+  border-radius: 50%;
+  background: #ffff00;
+  box-shadow: 0 0 0 0.18rem oklch(97% 0.018 95 / 92%);
+}
+
+.equivalentSampleFlag {
+  position: relative;
+  display: grid;
+  min-inline-size: 7.4rem;
+  min-block-size: 2.55rem;
+  align-content: center;
+  padding: 0.28rem 0.8rem 0.28rem 1.55rem;
+  overflow: hidden;
+  border: 1px solid oklch(24% 0.035 142);
+  border-radius: 0.32rem;
+  background: oklch(98% 0.018 95);
+  box-shadow: 0 2px 5px oklch(27% 0.025 135 / 12%);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.equivalentSampleFlag::before,
+.equivalentSampleFlag::after {
+  position: absolute;
+  inset-block: 0;
+  content: "";
+}
+
+.equivalentSampleFlag::before {
+  inset-inline-start: 0;
+  inline-size: 1rem;
+  border-inline-end: 1px solid oklch(36% 0.055 70);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 0.18rem,
+      oklch(48% 0.06 70 / 16%) 0.18rem 0.22rem
+    ),
+    oklch(70% 0.075 67);
+}
+
+.equivalentSampleFlag::after {
+  inset-inline-end: 0;
+  inline-size: 0.14rem;
+  background: oklch(27% 0.03 142);
+}
+
+.equivalentSampleFlag strong {
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.equivalentSampleFlag small {
+  margin-block-start: 0.16rem;
+  color: oklch(40% 0.026 140);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.equivalentDefinition {
+  margin: 0;
+  color: oklch(34% 0.03 142);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.equivalentDetails {
+  display: grid;
+  gap: 0.38rem;
+  margin: 0;
+  padding-block-start: 0.55rem;
+  border-block-start: 1px solid oklch(81% 0.018 126);
+  font-size: 0.66rem;
+  line-height: 1.25;
+}
+
+.equivalentDetails > div {
+  display: grid;
+  grid-template-columns: 4.4rem minmax(0, 1fr);
+  gap: 0.4rem;
+}
+
+.equivalentDetails dt,
+.equivalentDetails dd {
+  margin: 0;
+}
+
+.equivalentDetails dt {
+  color: oklch(26% 0.034 142);
+  font-weight: 750;
+}
+
+.equivalentDetails dd {
+  color: oklch(40% 0.026 140);
+}
+
+.keyAqiDot {
+  display: inline-block;
+  inline-size: 0.58rem;
+  block-size: 0.58rem;
+  margin-inline-end: 0.18rem;
+  border: 1px solid oklch(29% 0.026 140);
+  border-radius: 50%;
+  background: #ffff00;
+  vertical-align: -0.08rem;
 }
 
 .scaleNote {
@@ -318,6 +490,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .root::after,
   .root *,
   .root *::before,
   .root *::after {

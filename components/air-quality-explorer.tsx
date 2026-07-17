@@ -122,7 +122,8 @@ export function AirQualityExplorer() {
   const [requestVersion, setRequestVersion] = useState(0);
   const [clockNow, setClockNow] = useState(() => Date.now());
   const [adaptiveSheet, setAdaptiveSheet] = useState(false);
-  const [displayMode, setDisplayMode] = useState<DisplayMode>("aqi");
+  const [displayMode, setDisplayMode] =
+    useState<DisplayMode>("cigarettes");
   const [view, setView] = useState<ExplorerView>("map");
   const [selectedStationId, setSelectedStationId] = useState<string | null>(
     null,
@@ -596,7 +597,7 @@ export function AirQualityExplorer() {
         <div className={styles.tools} aria-label="Map controls">
           <div className={styles.controlGroup}>
             <span className={styles.controlLabel} id="label-mode-label">
-              Marker label
+              Map measure
             </span>
             <div
               className={styles.segmentedControl}
@@ -606,18 +607,19 @@ export function AirQualityExplorer() {
               <button
                 className={styles.segmentButton}
                 type="button"
-                aria-pressed={displayMode === "aqi"}
-                onClick={() => setDisplayMode("aqi")}
+                aria-pressed={displayMode === "cigarettes"}
+                onClick={() => setDisplayMode("cigarettes")}
               >
-                AQI
+                <span className={styles.filterGlyph} aria-hidden="true" />
+                <span>Cigarette equivalent</span>
               </button>
               <button
                 className={styles.segmentButton}
                 type="button"
-                aria-pressed={displayMode === "cigarettes"}
-                onClick={() => setDisplayMode("cigarettes")}
+                aria-pressed={displayMode === "aqi"}
+                onClick={() => setDisplayMode("aqi")}
               >
-                Cigarette equivalent
+                AQI
               </button>
             </div>
           </div>
@@ -725,8 +727,9 @@ export function AirQualityExplorer() {
 
         {displayMode === "cigarettes" ? (
           <p className={styles.analogyNote} role="note">
-            Rough projected rate if the latest outdoor PM2.5 level persisted
-            for 24 hours — not personal exposure or actual smoking.
+            Projected cigarette-equivalents per day if the latest outdoor PM2.5
+            level persisted for 24 hours — not personal exposure or actual
+            smoking.
           </p>
         ) : null}
       </div>

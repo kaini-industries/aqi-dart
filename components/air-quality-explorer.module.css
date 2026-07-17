@@ -163,6 +163,45 @@
   padding: 0.625rem 0.75rem;
 }
 
+.segmentButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.filterGlyph {
+  position: relative;
+  flex: 0 0 1.35rem;
+  width: 1.35rem;
+  height: 0.42rem;
+  overflow: hidden;
+  color: currentColor;
+  border: 1px solid currentColor;
+  border-radius: 999px 0.16rem 0.16rem 999px;
+}
+
+.filterGlyph::before,
+.filterGlyph::after {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  content: "";
+}
+
+.filterGlyph::before {
+  left: -1px;
+  width: 0.42rem;
+  background: oklch(70% 0.075 67);
+  border-right: 1px solid currentColor;
+}
+
+.filterGlyph::after {
+  right: -1px;
+  width: 0.1rem;
+  background: currentColor;
+}
+
 .segmentButton + .segmentButton,
 .iconSegmentButton + .iconSegmentButton {
   border-left: 1px solid var(--rule);

@@ -98,12 +98,36 @@ test("loads the current monitor map and clearly labels fallback data", async ({
   await expect(
     mapRegion.getByText("Plotting current monitors", { exact: true }),
   ).toHaveCount(0);
+});
 
-  await page.getByRole("button", { name: "Cigarette equivalent" }).click();
+test("defaults to cigarette-equivalent markers and can switch to AQI", async ({
+  page,
+}) => {
+  const cigaretteMode = page.getByRole("button", {
+    name: "Cigarette equivalent",
+  });
+  const aqiMode = page.getByRole("button", { name: "AQI" });
+  const persistenceNote = page.getByRole("note").filter({
+    hasText: /latest outdoor PM2\.5 level persisted for 24 hours/,
+  });
+  const mapRegion = page.getByRole("region", {
+    name: "Current air quality map",
+  });
+
+  await expect(cigaretteMode).toHaveAttribute("aria-pressed", "true");
+  await expect(aqiMode).toHaveAttribute("aria-pressed", "false");
+  await expect(persistenceNote).toBeVisible();
   await expect(
-    page.getByText(
-      /latest outdoor PM2\.5 level persisted for 24 hours/,
-    ),
+    mapRegion.getByText(/cigarette-equivalent.*key/i).first(),
+  ).toBeVisible();
+
+  await aqiMode.click();
+
+  await expect(aqiMode).toHaveAttribute("aria-pressed", "true");
+  await expect(cigaretteMode).toHaveAttribute("aria-pressed", "false");
+  await expect(persistenceNote).toHaveCount(0);
+  await expect(
+    mapRegion.getByText("AQI field key", { exact: true }).first(),
   ).toBeVisible();
 });
 
