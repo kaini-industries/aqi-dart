@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["iad1"],
+  "crons": [
+    {
+      "path": "/api/internal/cron/ingest",
+      "schedule": "40 * * * *"
+    },
+    {
+      "path": "/api/internal/cron/reconcile",
+      "schedule": "10 4 * * *"
+    }
+  ]
+}

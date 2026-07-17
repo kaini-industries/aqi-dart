@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+
+# tests
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# local environment
+.env
+.env.local
+.env.*.local
+
+# vercel
+.vercel/
+
+# editors and OS
+.DS_Store
+*.swp
+
+# logs
+*.log
+pnpm-debug.log*

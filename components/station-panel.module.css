@@ -1,0 +1,721 @@
+.panel {
+  --panel-paper: var(--color-paper, oklch(96.5% 0.014 86));
+  --panel-paper-deep: var(--color-paper-deep, oklch(92.5% 0.021 88));
+  --panel-ink: var(--color-ink, oklch(23% 0.026 151));
+  --panel-ink-soft: var(--color-ink-soft, oklch(43% 0.023 151));
+  --panel-rule: var(--color-rule, oklch(79% 0.019 89));
+  --panel-accent: var(--color-accent, oklch(43% 0.071 151));
+  --panel-alert: var(--color-alert, oklch(43% 0.11 32));
+  --panel-focus: var(--color-focus, oklch(50% 0.13 240));
+  container-name: station-panel;
+  container-type: inline-size;
+  box-sizing: border-box;
+  height: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  color: var(--panel-ink);
+  background: var(--panel-paper);
+  border-inline-start: 1px solid var(--panel-rule);
+  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.panel,
+.panel * {
+  box-sizing: border-box;
+}
+
+.header {
+  position: relative;
+  padding: clamp(1rem, 5cqi, 1.75rem) clamp(1rem, 6cqi, 2rem) 1.5rem;
+}
+
+.headerTopline,
+.sectionHeadingRow,
+.statusLine,
+.aqiValueRow,
+.equivalentValueRow,
+.accumulatedValueRow,
+.completenessLabels {
+  display: flex;
+  align-items: center;
+}
+
+.headerTopline,
+.sectionHeadingRow,
+.completenessLabels {
+  justify-content: space-between;
+}
+
+.headerTopline {
+  gap: 0.75rem;
+}
+
+.statusLine {
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.eyebrow,
+.stateKicker,
+.metricLabel,
+.metadata dt {
+  color: var(--panel-ink-soft);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.eyebrow,
+.stateKicker {
+  margin: 0;
+}
+
+.freshness {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding-inline: 0.5rem;
+  color: var(--panel-ink);
+  background: var(--panel-paper-deep);
+  border: 1px solid var(--panel-rule);
+  border-radius: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.freshness::before {
+  width: 0.5rem;
+  height: 0.5rem;
+  content: "";
+  background: var(--panel-accent);
+  border: 1px solid var(--panel-ink);
+}
+
+.freshness[data-freshness="stale"]::before {
+  background: oklch(72% 0.14 75);
+  transform: rotate(45deg);
+}
+
+.freshness[data-freshness="expired"]::before {
+  background: var(--panel-alert);
+  border-radius: 50%;
+}
+
+.closeButton {
+  display: inline-grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  padding: 0;
+  color: var(--panel-ink);
+  background: transparent;
+  border: 1px solid var(--panel-rule);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.closeButton span {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+  line-height: 1;
+  transform: translateY(-0.05em);
+}
+
+@media (hover: hover) {
+  .closeButton:hover {
+    background: var(--panel-paper-deep);
+    border-color: var(--panel-ink-soft);
+  }
+}
+
+.closeButton:active {
+  transform: translateY(1px);
+}
+
+.closeButton:focus-visible {
+  outline: 3px solid var(--panel-focus);
+  outline-offset: 2px;
+}
+
+.stationName,
+.emptyTitle {
+  max-width: 15ch;
+  margin: 1rem 0 0;
+  color: var(--panel-ink);
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 8cqi, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.location {
+  margin: 0.65rem 0 0;
+  color: var(--panel-ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+.demoNotice {
+  margin: 1.25rem 0 0;
+  padding: 0.75rem 0;
+  color: var(--panel-alert);
+  border-block: 1px solid var(--panel-alert);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.readingStrip {
+  display: grid;
+  border-block: 1px solid var(--panel-rule);
+}
+
+.aqiReading,
+.rawReading,
+.equivalentReading {
+  min-width: 0;
+  padding: 1.25rem clamp(1rem, 6cqi, 2rem);
+}
+
+.aqiReading {
+  position: relative;
+  padding-inline-start: calc(clamp(1rem, 6cqi, 2rem) + 0.55rem);
+}
+
+.aqiReading::before {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0.55rem;
+  content: "";
+  background: var(--category-color);
+  border-inline-end: 1px solid var(--panel-ink);
+}
+
+.rawReading,
+.equivalentReading {
+  border-block-start: 1px solid var(--panel-rule);
+}
+
+.aqiValueRow {
+  min-width: 0;
+  align-items: flex-end;
+  gap: 0.85rem;
+  margin-top: 0.35rem;
+}
+
+.aqiValue,
+.rawValue,
+.equivalentValue,
+.accumulatedValue {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.aqiValue {
+  flex: 0 0 auto;
+  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  font-size: clamp(3.25rem, 16cqi, 5rem);
+  font-weight: 750;
+  letter-spacing: -0.065em;
+  line-height: 0.85;
+}
+
+.categoryLabel {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.2rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.categorySwatch {
+  width: 0.65rem;
+  height: 1.4rem;
+  flex: 0 0 0.65rem;
+  background: var(--category-color);
+  border: 1px solid var(--panel-ink);
+}
+
+.categoryGuidance {
+  max-width: 39ch;
+  margin: 0.75rem 0 0;
+  color: var(--panel-ink);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.metricFootnote {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--panel-ink-soft);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.rawValue {
+  display: block;
+  margin-top: 0.55rem;
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(1.75rem, 8cqi, 2.35rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.equivalentValueRow,
+.accumulatedValueRow {
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.65rem;
+  margin-top: 0.55rem;
+}
+
+.equivalentValue {
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(2.25rem, 11cqi, 3.35rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.equivalentUnit,
+.accumulatedUnit {
+  max-width: 16ch;
+  color: var(--panel-ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.persistenceNote,
+.measurementNote,
+.instrumentNote,
+.historyQualifier,
+.gapNote,
+.preliminaryNotice,
+.historyState p,
+.emptyCopy {
+  margin: 0;
+  color: var(--panel-ink-soft);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.persistenceNote {
+  max-width: 34ch;
+  margin-top: 0.65rem;
+  color: var(--panel-ink);
+  font-weight: 650;
+}
+
+.measurementNote,
+.instrumentNote {
+  padding: 1rem clamp(1rem, 6cqi, 2rem);
+  border-block-end: 1px solid var(--panel-rule);
+}
+
+.instrumentNote {
+  color: var(--panel-alert);
+  background: oklch(94% 0.035 63);
+}
+
+.historySection,
+.provenance {
+  padding: clamp(1.4rem, 6cqi, 2rem) clamp(1rem, 6cqi, 2rem);
+  border-block-end: 1px solid var(--panel-rule);
+}
+
+.sectionHeadingRow {
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.sectionTitle,
+.stateTitle {
+  margin: 0.3rem 0 0;
+  color: var(--panel-ink);
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.completenessText {
+  flex: 0 0 auto;
+  color: var(--panel-ink-soft);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.historyState {
+  min-height: 10rem;
+  display: grid;
+  align-content: center;
+  gap: 0.75rem;
+}
+
+.historyState p {
+  max-width: 45ch;
+}
+
+.historyState .stateTitle {
+  font-size: 1.5rem;
+}
+
+.errorDetail {
+  padding-inline-start: 0.75rem;
+  color: var(--panel-alert) !important;
+  border-inline-start: 2px solid var(--panel-alert);
+}
+
+.historyRetry {
+  min-height: 2.75rem;
+  width: fit-content;
+  padding: 0.65rem 0.9rem;
+  color: var(--panel-paper);
+  background: var(--panel-ink);
+  border: 1px solid var(--panel-ink);
+  border-radius: 0.2rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 750;
+}
+
+@media (hover: hover) {
+  .historyRetry:hover {
+    background: var(--panel-accent);
+  }
+}
+
+.historyRetry:focus-visible {
+  outline: 3px solid var(--panel-focus);
+  outline-offset: 2px;
+}
+
+.historySkeleton {
+  display: grid;
+  height: 4.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  border-block-end: 1px solid var(--panel-rule);
+}
+
+.historySkeleton span {
+  display: block;
+  background: var(--panel-rule);
+  animation: history-pulse 1.4s ease-in-out infinite alternate;
+}
+
+.historySkeleton span:nth-child(1) {
+  height: 32%;
+}
+
+.historySkeleton span:nth-child(2) {
+  height: 68%;
+  animation-delay: 120ms;
+}
+
+.historySkeleton span:nth-child(3) {
+  height: 47%;
+  animation-delay: 240ms;
+}
+
+@keyframes history-pulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sparkline {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1.1rem;
+  overflow: visible;
+}
+
+.sparklineGuide,
+.sparklineBaseline,
+.sparklineGap,
+.sparklinePath,
+.sparklinePoint {
+  vector-effect: non-scaling-stroke;
+}
+
+.sparklineGuide {
+  stroke: var(--panel-rule);
+  stroke-dasharray: 2 4;
+  stroke-width: 1;
+}
+
+.sparklineBaseline {
+  stroke: var(--panel-ink-soft);
+  stroke-width: 1;
+}
+
+.sparklineGap {
+  stroke: var(--panel-alert);
+  stroke-width: 1.5;
+}
+
+.sparklinePath {
+  fill: none;
+  stroke: var(--panel-accent);
+  stroke-linecap: square;
+  stroke-linejoin: bevel;
+  stroke-width: 2;
+}
+
+.sparklinePoint {
+  fill: var(--panel-paper);
+  stroke: var(--panel-accent);
+  stroke-width: 1.25;
+}
+
+.sparklineMaximum,
+.sparklineTime {
+  fill: var(--panel-ink-soft);
+  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sparklineMaximum {
+  font-weight: 700;
+}
+
+.accumulatedReading {
+  padding-block: 1.1rem;
+  border-block: 1px solid var(--panel-rule);
+}
+
+.accumulatedValue {
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.historyQualifier {
+  margin-top: 0.65rem;
+}
+
+.completenessBlock {
+  padding-top: 1rem;
+}
+
+.completenessLabels {
+  gap: 1rem;
+  color: var(--panel-ink-soft);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.completenessProgress {
+  display: block;
+  width: 100%;
+  height: 0.55rem;
+  margin-top: 0.5rem;
+  appearance: none;
+  overflow: hidden;
+  background: var(--panel-paper-deep);
+  border: 1px solid var(--panel-rule);
+  border-radius: 0;
+}
+
+.completenessProgress::-webkit-progress-bar {
+  background: var(--panel-paper-deep);
+}
+
+.completenessProgress::-webkit-progress-value {
+  background: var(--panel-accent);
+}
+
+.completenessProgress::-moz-progress-bar {
+  background: var(--panel-accent);
+}
+
+.gapNote {
+  margin-top: 0.7rem;
+  font-size: 0.75rem;
+}
+
+.noChart {
+  margin: 1rem 0;
+  padding: 1.25rem 0;
+  color: var(--panel-ink-soft);
+  border-block: 1px dashed var(--panel-rule);
+  font-size: 0.875rem;
+}
+
+.metadata {
+  display: grid;
+  gap: 0;
+  margin: 1rem 0 0;
+}
+
+.metadata > div {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.8fr) minmax(0, 1.2fr);
+  gap: 1rem;
+  padding-block: 0.7rem;
+  border-block-start: 1px solid var(--panel-rule);
+}
+
+.metadata dt,
+.metadata dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.metadata dd {
+  overflow-wrap: anywhere;
+  color: var(--panel-ink);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.relativeTime {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--panel-ink-soft);
+  font-size: 0.75rem;
+}
+
+.preliminaryNotice {
+  margin-top: 1rem;
+  padding: 0.8rem 0 0.8rem 0.75rem;
+  color: var(--panel-alert);
+  border-inline-start: 2px solid var(--panel-alert);
+}
+
+.emptyState {
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: center;
+  gap: 1rem;
+  padding: clamp(1.5rem, 8cqi, 3rem) clamp(1rem, 7cqi, 2.25rem);
+}
+
+.emptyIndex {
+  color: var(--panel-rule);
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: 2.5rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+  writing-mode: vertical-rl;
+}
+
+.emptyTitle {
+  max-width: none;
+  margin-top: 0.45rem;
+}
+
+.emptyCopy {
+  max-width: 37ch;
+  margin-top: 1rem;
+}
+
+@container station-panel (min-width: 34rem) {
+  .readingStrip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .aqiReading {
+    grid-row: span 2;
+  }
+
+  .rawReading {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--panel-rule);
+  }
+
+  .equivalentReading {
+    border-inline-start: 1px solid var(--panel-rule);
+  }
+
+  .historyContent {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(13rem, 0.75fr);
+    gap: 0 1.5rem;
+  }
+
+  .historyContent .sectionHeadingRow {
+    grid-column: 1 / -1;
+  }
+
+  .sparkline {
+    align-self: center;
+  }
+
+  .accumulatedReading {
+    align-self: center;
+    border-block: 0;
+    border-inline-start: 1px solid var(--panel-rule);
+    padding: 1rem 0 1rem 1.5rem;
+  }
+
+  .completenessBlock {
+    grid-column: 1 / -1;
+    border-block-start: 1px solid var(--panel-rule);
+  }
+}
+
+@media (pointer: coarse) {
+  .closeButton {
+    width: 3rem;
+    height: 3rem;
+    flex-basis: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .closeButton,
+  .historySkeleton span {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .aqiReading::before,
+  .categorySwatch,
+  .freshness::before {
+    background: CanvasText;
+  }
+
+  .sparklinePath,
+  .sparklinePoint {
+    stroke: CanvasText;
+  }
+}

@@ -1,0 +1,329 @@
+.root {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: clamp(27rem, 66svh, 48rem);
+  overflow: hidden;
+  border: 1px solid oklch(69% 0.022 132);
+  border-radius: 2px;
+  background: oklch(93% 0.021 100);
+  color: oklch(24% 0.035 142);
+  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.map :global(.maplibregl-canvas:focus-visible) {
+  outline: 3px solid oklch(47% 0.12 145);
+  outline-offset: -3px;
+}
+
+.stateLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4cqi, 2rem);
+  pointer-events: none;
+}
+
+.stateNote {
+  display: grid;
+  inline-size: min(22rem, 100%);
+  gap: 0.45rem;
+  padding: 1rem 1.125rem 1.125rem;
+  border: 1px solid oklch(52% 0.032 137);
+  border-radius: 1px;
+  background: oklch(97% 0.018 95);
+  box-shadow: 0 6px 18px oklch(27% 0.025 135 / 12%);
+}
+
+.stateNote::before {
+  content: "";
+  inline-size: 2.75rem;
+  block-size: 2px;
+  margin-block-end: 0.25rem;
+  background: oklch(42% 0.065 143);
+}
+
+.stateError::before {
+  background: oklch(43% 0.13 25);
+}
+
+.stateTitle {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+}
+
+.stateDetail {
+  max-inline-size: 34ch;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: oklch(38% 0.026 139);
+}
+
+.desktopLegend,
+.mobileLegend {
+  position: absolute;
+  inset-block-start: max(0.75rem, env(safe-area-inset-top));
+  inset-inline-start: max(0.75rem, env(safe-area-inset-left));
+  z-index: 2;
+  border: 1px solid oklch(63% 0.025 136);
+  border-radius: 1px;
+  background: oklch(97% 0.018 95);
+  color: oklch(26% 0.034 142);
+  box-shadow: 0 2px 8px oklch(27% 0.025 135 / 12%);
+}
+
+.desktopLegend {
+  display: none;
+  inline-size: 18.5rem;
+  padding: 0.65rem 0.7rem 0.7rem;
+}
+
+.mobileLegend {
+  inline-size: min(17.25rem, calc(100% - 5.25rem));
+}
+
+.mobileLegend > summary {
+  display: flex;
+  min-block-size: 44px;
+  align-items: center;
+  gap: 0.45rem;
+  padding-inline: 0.7rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+
+.mobileLegend > summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobileLegend > summary::before {
+  content: "+";
+  display: grid;
+  inline-size: 1rem;
+  block-size: 1rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.mobileLegend[open] > summary::before {
+  content: "−";
+}
+
+.mobileLegend > summary:focus {
+  outline: none;
+}
+
+.mobileLegend > summary:focus-visible {
+  outline: 3px solid oklch(47% 0.12 145);
+  outline-offset: 2px;
+}
+
+.mobileLegend .legendGrid {
+  padding: 0 0.7rem 0.7rem;
+  border-block-start: 1px solid oklch(81% 0.018 126);
+}
+
+.legendHeading {
+  display: block;
+  margin-block-end: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+
+.legendGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendItem {
+  display: grid;
+  grid-template-columns: 0.65rem minmax(0, 1fr) auto;
+  min-block-size: 1.35rem;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.6875rem;
+  line-height: 1.15;
+}
+
+.legendSwatch {
+  inline-size: 0.65rem;
+  block-size: 0.65rem;
+  border: 1px solid oklch(29% 0.026 140);
+  border-radius: 50%;
+}
+
+.legendLabel {
+  overflow-wrap: anywhere;
+}
+
+.legendRange {
+  color: oklch(40% 0.026 140);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.scaleNote {
+  position: absolute;
+  inset-block-end: max(1.5rem, env(safe-area-inset-bottom));
+  inset-inline-start: max(0.75rem, env(safe-area-inset-left));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 1.75rem;
+  padding-inline: 0.5rem;
+  border: 1px solid oklch(74% 0.02 128);
+  background: oklch(97% 0.018 95);
+  color: oklch(31% 0.03 140);
+  font-size: 0.6875rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.scaleRule {
+  inline-size: 1.75rem;
+  block-size: 1px;
+  background: currentColor;
+}
+
+.root :global(.maplibregl-ctrl-top-right) {
+  inset-block-start: max(0.75rem, env(safe-area-inset-top));
+  inset-inline-end: max(0.75rem, env(safe-area-inset-right));
+}
+
+.root :global(.maplibregl-ctrl-top-right .maplibregl-ctrl) {
+  margin: 0 0 0.5rem;
+}
+
+.root :global(.maplibregl-ctrl-group) {
+  overflow: hidden;
+  border: 1px solid oklch(58% 0.028 137);
+  border-radius: 2px;
+  background: oklch(97% 0.018 95);
+  box-shadow: 0 2px 7px oklch(27% 0.025 135 / 14%);
+}
+
+.root :global(.maplibregl-ctrl-group button) {
+  inline-size: 44px;
+  block-size: 44px;
+  background-color: oklch(97% 0.018 95);
+}
+
+.root :global(.maplibregl-ctrl-group button + button) {
+  border-block-start-color: oklch(78% 0.018 126);
+}
+
+.root :global(.maplibregl-ctrl-group button:focus) {
+  box-shadow: none;
+}
+
+.root :global(.maplibregl-ctrl-group button:focus-visible) {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid oklch(47% 0.12 145);
+  outline-offset: -3px;
+}
+
+.root :global(.maplibregl-ctrl-group button:active) {
+  background-color: oklch(89% 0.035 110);
+}
+
+.root :global(.maplibregl-ctrl-attrib) {
+  padding: 0.18rem 0.35rem;
+  border-radius: 0;
+  background: oklch(97% 0.018 95);
+  color: oklch(32% 0.025 140);
+  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  font-size: 0.625rem;
+  line-height: 1.35;
+}
+
+.root :global(.maplibregl-ctrl-attrib a) {
+  color: oklch(31% 0.08 145);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.root :global(.maplibregl-ctrl-attrib-button) {
+  inline-size: 44px;
+  block-size: 44px;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .root :global(.maplibregl-ctrl-group button:hover) {
+    background-color: oklch(92% 0.028 110);
+  }
+}
+
+@container (max-width: 34rem) {
+  .root {
+    min-block-size: min(68svh, 38rem);
+  }
+
+  .stateLayer {
+    align-items: end;
+    padding-block-end: 3.75rem;
+  }
+
+  .stateNote {
+    inline-size: 100%;
+  }
+
+  .scaleNote {
+    max-inline-size: calc(100% - 4.5rem);
+  }
+}
+
+@container (min-width: 42rem) {
+  .desktopLegend {
+    display: block;
+  }
+
+  .mobileLegend {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

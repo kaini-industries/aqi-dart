@@ -1,0 +1,109 @@
+.page {
+  align-items: center;
+  background:
+    linear-gradient(var(--rule) 1px, transparent 1px) 0 0 / 100% 3rem,
+    var(--paper-1);
+  display: grid;
+  min-height: 100svh;
+  padding: max(var(--space-6), env(safe-area-inset-top))
+    max(var(--space-6), env(safe-area-inset-right))
+    max(var(--space-6), env(safe-area-inset-bottom))
+    max(var(--space-6), env(safe-area-inset-left));
+}
+
+.note {
+  background: var(--paper-0);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0.75rem 0.75rem 0 var(--paper-3);
+  display: grid;
+  gap: var(--space-6);
+  justify-self: center;
+  max-width: 38rem;
+  padding: clamp(1.5rem, 6vw, 4rem);
+  position: relative;
+}
+
+.note::before {
+  background: var(--clay);
+  content: "";
+  height: 0.75rem;
+  left: -0.375rem;
+  position: absolute;
+  top: 2rem;
+  width: 0.75rem;
+}
+
+.eyebrow {
+  color: var(--moss-0);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  margin: 0;
+}
+
+.body {
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 48ch;
+}
+
+.action {
+  align-items: center;
+  background: var(--ink-0);
+  border: 1px solid var(--ink-0);
+  border-radius: var(--radius-sm);
+  color: var(--paper-0);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--text-sm);
+  font-weight: 800;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: var(--space-3) var(--space-4);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.action:hover {
+  background: var(--moss-0);
+  color: var(--paper-0);
+}
+
+.skeletonLine,
+.skeletonTitle,
+.skeletonMap {
+  animation: pulse 1.4s var(--ease-toggle) infinite alternate;
+  background: var(--paper-3);
+}
+
+.skeletonTitle {
+  height: 4rem;
+  width: min(80%, 22rem);
+}
+
+.skeletonLine {
+  height: 1rem;
+  width: min(92%, 30rem);
+}
+
+.skeletonMap {
+  height: min(42svh, 24rem);
+  width: 100%;
+}
+
+@keyframes pulse {
+  to {
+    opacity: 0.45;
+  }
+}

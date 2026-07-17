@@ -1,0 +1,59 @@
+name: Collect AQI data
+
+on:
+  schedule:
+    # AirNow normally publishes around :35. Avoid the busier top of the hour.
+    - cron: "43 * * * *"
+  workflow_dispatch:
+
+# The workflow only makes an authenticated HTTPS request and needs no access to
+# repository contents or the GitHub API.
+permissions: {}
+
+concurrency:
+  group: collect-aqi-production
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    # Keeps this committed workflow dormant until the owner explicitly opts in.
+    if: ${{ vars.AQI_COLLECTION_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Trigger the secured collector
+        shell: bash
+        env:
+          COLLECTOR_URL: ${{ secrets.COLLECTOR_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${COLLECTOR_URL:-}" || -z "${CRON_SECRET:-}" ]]; then
+            echo "::error::COLLECTOR_URL and CRON_SECRET repository secrets are required."
+            exit 1
+          fi
+
+          case "${COLLECTOR_URL}" in
+            https://*) ;;
+            *)
+              echo "::error::COLLECTOR_URL must be an HTTPS URL."
+              exit 1
+              ;;
+          esac
+
+          # Do not enable shell tracing, curl verbosity, or redirect following:
+          # each could expose credentials or forward the Authorization header.
+          curl \
+            --silent \
+            --show-error \
+            --fail \
+            --output /dev/null \
+            --write-out 'Collector response: HTTP %{http_code}\n' \
+            --connect-timeout 20 \
+            --max-time 240 \
+            --retry 2 \
+            --retry-delay 10 \
+            --retry-connrefused \
+            --header "Authorization: Bearer ${CRON_SECRET}" \
+            "${COLLECTOR_URL}"

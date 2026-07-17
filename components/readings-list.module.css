@@ -1,0 +1,484 @@
+.list {
+  --list-paper: var(--color-paper, oklch(96.5% 0.014 86));
+  --list-paper-deep: var(--color-paper-deep, oklch(92.5% 0.021 88));
+  --list-ink: var(--color-ink, oklch(23% 0.026 151));
+  --list-ink-soft: var(--color-ink-soft, oklch(43% 0.023 151));
+  --list-rule: var(--color-rule, oklch(79% 0.019 89));
+  --list-accent: var(--color-accent, oklch(43% 0.071 151));
+  --list-alert: var(--color-alert, oklch(43% 0.11 32));
+  --list-focus: var(--color-focus, oklch(50% 0.13 240));
+  container-name: readings-list;
+  container-type: inline-size;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 100%;
+  overflow: auto;
+  color: var(--list-ink);
+  background: var(--list-paper);
+  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.list,
+.list * {
+  box-sizing: border-box;
+}
+
+.listHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 4cqi, 2.25rem) clamp(1rem, 5cqi, 2.75rem) 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--list-ink-soft);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0.35rem 0 0;
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(1.75rem, 6cqi, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.count {
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--list-ink-soft);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.listDescription {
+  max-width: 65ch;
+  margin: 0;
+  padding: 0 clamp(1rem, 5cqi, 2.75rem) clamp(1rem, 3cqi, 1.5rem);
+  color: var(--list-ink-soft);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.errorState {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0 clamp(1rem, 5cqi, 2.75rem) 1rem;
+  padding: 0.8rem 1rem;
+  color: var(--list-alert);
+  background: oklch(94% 0.035 63);
+  border-inline-start: 3px solid var(--list-alert);
+  font-size: 0.8125rem;
+}
+
+.columnHeadings {
+  display: none;
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-end: 1px solid var(--list-rule);
+}
+
+.showMore {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 5cqi, 2.75rem) 1.5rem;
+  border-block-end: 1px solid var(--list-rule);
+}
+
+.showMore p {
+  margin: 0;
+  color: var(--list-ink-soft);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.showMoreButton {
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  color: var(--list-paper);
+  background: var(--list-ink);
+  border: 1px solid var(--list-ink);
+  border-radius: 0.2rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+@media (hover: hover) {
+  .showMoreButton:hover {
+    color: var(--list-ink);
+    background: var(--list-paper-deep);
+  }
+}
+
+.showMoreButton:active {
+  transform: translateY(1px);
+}
+
+.showMoreButton:focus-visible {
+  outline: 3px solid var(--list-focus);
+  outline-offset: 2px;
+}
+
+.rowItem {
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  position: relative;
+  width: 100%;
+  min-height: 4.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7.5rem, 0.7fr);
+  grid-template-areas:
+    "station station"
+    "aqi equivalent"
+    "concentration observed";
+  gap: 0.8rem 1rem;
+  align-items: start;
+  padding: 1rem clamp(1rem, 5cqi, 2.75rem) 1rem
+    calc(clamp(1rem, 5cqi, 2.75rem) + 0.45rem);
+  overflow: hidden;
+  color: var(--list-ink);
+  text-align: start;
+  background: transparent;
+  border: 0;
+  border-block-start: 1px solid var(--list-rule);
+  border-radius: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.row::before {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0.45rem;
+  content: "";
+  background: var(--row-category);
+  border-inline-end: 1px solid var(--list-ink);
+}
+
+.row[aria-current="true"] {
+  background: var(--list-paper-deep);
+  box-shadow: inset 0 0 0 2px var(--list-ink);
+}
+
+@media (hover: hover) {
+  .row:hover {
+    background: var(--list-paper-deep);
+  }
+}
+
+.row:active {
+  background: oklch(90% 0.025 88);
+}
+
+.row:focus-visible {
+  z-index: 1;
+  outline: 3px solid var(--list-focus);
+  outline-offset: -4px;
+}
+
+.stationCell {
+  min-width: 0;
+  display: grid;
+  grid-area: station;
+  gap: 0.15rem;
+}
+
+.stationCell > strong {
+  overflow: hidden;
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stationMeta {
+  overflow: hidden;
+  color: var(--list-ink-soft);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row[data-freshness="stale"] .stationMeta,
+.row[data-freshness="expired"] .stationMeta {
+  color: var(--list-alert);
+  font-weight: 700;
+}
+
+.observedCell,
+.aqiCell,
+.concentrationCell,
+.equivalentCell {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 0.18rem;
+  color: var(--list-ink-soft);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.observedCell {
+  grid-area: observed;
+  text-align: end;
+}
+
+.aqiCell {
+  grid-area: aqi;
+}
+
+.concentrationCell {
+  grid-area: concentration;
+}
+
+.equivalentCell {
+  grid-area: equivalent;
+  text-align: end;
+}
+
+.aqiCell > strong,
+.equivalentCell > strong {
+  color: var(--list-ink);
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 750;
+  line-height: 1.1;
+}
+
+.row[data-display-mode="aqi"] .aqiCell > strong,
+.row[data-display-mode="cigarettes"] .equivalentCell > strong {
+  font-size: 1.4rem;
+  letter-spacing: -0.025em;
+}
+
+.categoryText {
+  display: inline-flex;
+  max-width: 18ch;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--list-ink-soft);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.categorySwatch {
+  width: 0.45rem;
+  height: 0.9rem;
+  flex: 0 0 0.45rem;
+  background: var(--row-category);
+  border: 1px solid var(--list-ink);
+}
+
+.dayAssumption {
+  color: var(--list-ink-soft);
+  font-size: 0.6875rem;
+  font-weight: 650;
+}
+
+.mobileLabel {
+  color: var(--list-ink-soft);
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.loadingRows {
+  border-block-end: 1px solid var(--list-rule);
+}
+
+.loadingRow {
+  min-height: 5.5rem;
+  display: grid;
+  grid-template-columns: 1fr 25% 18%;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 5cqi, 2.75rem);
+  border-block-start: 1px solid var(--list-rule);
+}
+
+.loadingRow span {
+  display: block;
+  height: 0.75rem;
+  background: var(--list-rule);
+  animation: list-pulse 1.4s ease-in-out infinite alternate;
+}
+
+.loadingRow span:first-child {
+  height: 1.2rem;
+}
+
+.loadingRow:nth-child(2) span {
+  animation-delay: 100ms;
+}
+
+.loadingRow:nth-child(3) span {
+  animation-delay: 200ms;
+}
+
+.loadingRow:nth-child(4) span {
+  animation-delay: 300ms;
+}
+
+@keyframes list-pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.emptyState {
+  min-height: 16rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: center;
+  gap: 1rem;
+  padding: clamp(2rem, 8cqi, 4rem) clamp(1rem, 5cqi, 2.75rem);
+  border-block: 1px solid var(--list-rule);
+}
+
+.emptyIndex {
+  color: var(--list-rule);
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: 2.5rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+  writing-mode: vertical-rl;
+}
+
+.emptyState h3 {
+  margin: 0;
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.emptyState p {
+  max-width: 46ch;
+  margin: 0.75rem 0 0;
+  color: var(--list-ink-soft);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@container readings-list (min-width: 48rem) {
+  .columnHeadings,
+  .row {
+    grid-template-columns:
+      minmax(14rem, 2.2fr)
+      minmax(7rem, 0.85fr)
+      minmax(8rem, 0.9fr)
+      minmax(8rem, 0.9fr)
+      minmax(8rem, 1fr);
+  }
+
+  .columnHeadings {
+    display: grid;
+    gap: 1rem;
+    padding: 0.65rem clamp(1rem, 5cqi, 2.75rem) 0.65rem
+      calc(clamp(1rem, 5cqi, 2.75rem) + 0.45rem);
+    color: var(--list-ink-soft);
+    background: var(--list-paper-deep);
+    border-block: 1px solid var(--list-rule);
+    font-size: 0.6875rem;
+    font-weight: 750;
+    letter-spacing: 0.09em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .row {
+    min-height: 4.5rem;
+    grid-template-areas: "station observed aqi concentration equivalent";
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.85rem;
+  }
+
+  .observedCell,
+  .equivalentCell {
+    text-align: start;
+  }
+
+  .mobileLabel {
+    display: none;
+  }
+
+  .aqiCell > strong,
+  .equivalentCell > strong,
+  .row[data-display-mode="aqi"] .aqiCell > strong,
+  .row[data-display-mode="cigarettes"] .equivalentCell > strong {
+    font-size: 1rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .row {
+    min-height: 5.25rem;
+  }
+
+  .showMoreButton {
+    min-height: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingRow span {
+    animation: none;
+  }
+
+  .showMoreButton {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .row::before,
+  .categorySwatch {
+    background: CanvasText;
+  }
+}
