@@ -646,6 +646,15 @@
   margin-top: 1rem;
 }
 
+@media (max-width: 59.999rem) {
+  .panel {
+    height: auto;
+    overflow: visible;
+    overscroll-behavior: auto;
+    scrollbar-gutter: auto;
+  }
+}
+
 @container station-panel (min-width: 34rem) {
   .readingStrip {
     grid-template-columns: 1fr 1fr;

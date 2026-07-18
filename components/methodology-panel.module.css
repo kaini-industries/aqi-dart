@@ -286,6 +286,15 @@
   padding-block: 1.25rem;
 }
 
+@media (max-width: 59.999rem) {
+  .panel {
+    height: auto;
+    overflow: visible;
+    overscroll-behavior: auto;
+    scrollbar-gutter: auto;
+  }
+}
+
 @container methodology-panel (min-width: 36rem) {
   .formula {
     grid-template-columns:

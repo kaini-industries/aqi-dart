@@ -209,10 +209,79 @@ test("opens the concise methodology and links to the complete field guide", asyn
 test.describe("adaptive monitor detail sheet", () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
-  test("moves focus into the sheet, closes with Escape, and restores the row", async ({
+  test("scrolls methodology content without moving the page behind it", async ({
+    page,
+  }) => {
+    const methodologyButton = page.getByRole("button", {
+      name: "Methodology",
+    });
+    const originalBodyOverflow = await page.locator("body").evaluate(
+      (body) => body.style.overflow,
+    );
+
+    await methodologyButton.click();
+
+    const detailSheet = page.getByRole("dialog", {
+      name: "How the estimate works",
+    });
+    const methodologyPanel = page.getByRole("complementary", {
+      name: "How the estimate works",
+    });
+    const scrollTarget = methodologyPanel.getByText(
+      /This is a rough health-impact analogy/,
+    );
+    const fullMethodologyLink = methodologyPanel.getByRole("link", {
+      name: /Read the full methodology/,
+    });
+
+    await expect(detailSheet).toBeVisible();
+    await expect(scrollTarget).toBeVisible();
+    await expect
+      .poll(() => page.locator("body").evaluate((body) => body.style.overflow))
+      .toBe("hidden");
+
+    const pageScrollBefore = await page.evaluate(() => window.scrollY);
+    const sheetScrollBefore = await detailSheet.evaluate(
+      (sheet) => sheet.scrollTop,
+    );
+    const targetBox = await scrollTarget.boundingBox();
+    expect(targetBox).not.toBeNull();
+
+    await page.mouse.move(
+      targetBox!.x + targetBox!.width / 2,
+      targetBox!.y + targetBox!.height / 2,
+    );
+    await page.mouse.wheel(0, 600);
+
+    await expect
+      .poll(() => detailSheet.evaluate((sheet) => sheet.scrollTop))
+      .toBeGreaterThan(sheetScrollBefore);
+    await expect
+      .poll(() => methodologyPanel.evaluate((panel) => panel.scrollTop))
+      .toBe(0);
+    expect(await page.evaluate(() => window.scrollY)).toBe(pageScrollBefore);
+
+    await page.mouse.wheel(0, 10_000);
+    await expect(fullMethodologyLink).toBeInViewport();
+    expect(await page.evaluate(() => window.scrollY)).toBe(pageScrollBefore);
+
+    await page.keyboard.press("Escape");
+
+    await expect(detailSheet).toBeHidden();
+    await expect(methodologyButton).toBeFocused();
+    await expect
+      .poll(() => page.locator("body").evaluate((body) => body.style.overflow))
+      .toBe(originalBodyOverflow);
+    expect(await page.evaluate(() => window.scrollY)).toBe(pageScrollBefore);
+  });
+
+  test("scrolls station details, closes with Escape, and restores the row", async ({
     page,
   }) => {
     const { chicagoRow, stationPanel } = await openChicagoFromList(page);
+    const detailSheet = page.getByRole("dialog", {
+      name: "Chicago — Com Ed",
+    });
 
     await expect(
       stationPanel.getByRole("button", {
@@ -228,6 +297,18 @@ test.describe("adaptive monitor detail sheet", () => {
         { message: "focus should move inside the adaptive detail sheet" },
       )
       .toBe(true);
+
+    await stationPanel
+      .getByText("PM2.5 NowCast AQI", { exact: true })
+      .hover();
+    await page.mouse.wheel(0, 600);
+
+    await expect
+      .poll(() => detailSheet.evaluate((sheet) => sheet.scrollTop))
+      .toBeGreaterThan(0);
+    await expect
+      .poll(() => stationPanel.evaluate((panel) => panel.scrollTop))
+      .toBe(0);
 
     await page.keyboard.press("Escape");
 
